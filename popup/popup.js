@@ -24,7 +24,7 @@ function cleanMessageHTML(htmlString) {
   const doc = parser.parseFromString(htmlString, 'text/html');
 
   function processElement(element) {
-    if (element.tagName.toLowerCase() === 'svg') {
+    if (element.tagName.toLowerCase() === 'svg' || element.tagName.toLowerCase() === 'button') {
       element.parentNode.removeChild(element);
       return;
     }

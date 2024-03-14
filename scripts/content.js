@@ -68,7 +68,6 @@ document.addEventListener('click', function() {
         const timestamp = new Date().toISOString();
 
         console.log("SAVED MESSAGES  ::  ",url,"  ::  ",timestamp);
-        // console.log(response);
     });
 });
 
@@ -97,8 +96,6 @@ document.addEventListener('click', function() {
 // const config = { attributes: true, childList: true, subtree: true };
 // const observer = new MutationObserver(handleMutations);
 
-// const targetNode = document.querySelector('.react-scroll-to-bottom--css-fffdd-1n7m0yu');
-// const targetNode = document.querySelector(".react-scroll-to-bottom--css-osbrt-1n7m0yu");
 const targetNode = document;
 
 function throttle(func, limit) {
@@ -131,38 +128,9 @@ const throttledScrollListener = throttle(function(event) {
         const url = window.location.href;
         const timestamp = new Date().toISOString();
     });
-}, 400); // 100ms
+}, 400); // THROTTLE 400
 
 targetNode.addEventListener('scroll', throttledScrollListener, true);
-
-
-
-
-
-
-
-
-
-// targetNode.addEventListener('scroll', (event) => {
-//     console.log('SCROLL : ', event.target);
-
-//     const messages = fetchMessages();
-
-//     chrome.runtime.sendMessage({action: "saveMessages", messages: messages}, function(response) {
-//         const url = window.location.href;
-//         const timestamp = new Date().toISOString();
-//     });
-// }, true);
-
-// if (targetNode) {
-//     observer.observe(targetNode, config);
-// } else {
-//     console.error('The target node for mutation observation does not exist.');
-// }
-
-
-// observer.disconnect();
-
 
 setTimeout(function(){
     const messages = fetchMessages();

@@ -19,6 +19,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         chrome.storage.local.get(['GPTLog_LastMessage'], function(result) {
             if (result.GPTLog_LastMessage) {
                 sendResponse({status: "success", messages: result.GPTLog_LastMessage});
+                const timestamp = new Date().toISOString();
+                console.log('Messages sent to Popup : ',timestamp);
             } else {
                 sendResponse({status: "error", messages: "No messages found."});
             }
