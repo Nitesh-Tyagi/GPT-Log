@@ -1,3 +1,5 @@
+// Listener for incoming messages from other parts of the extension.
+// Specifically listens for a request to save chat messages.
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.action === "saveMessages") {
         console.log('Received messages:', request.messages);
@@ -13,7 +15,8 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     return true;
 });
 
-
+// Listener for incoming messages from other parts of the extension.
+// Specifically listens for a request to fetch saved chat messages.
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.action === "fetchMessages") {
         chrome.storage.local.get(['GPTLog_LastMessage'], function(result) {

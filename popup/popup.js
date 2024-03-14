@@ -1,3 +1,5 @@
+// Function to display a single message in the popup.
+// It creates HTML elements to show the sender and the cleaned message.
 function displayMessage(sender, message) {
     const messageDiv = document.createElement('div');
     messageDiv.classList.add('message');
@@ -19,22 +21,27 @@ function displayMessage(sender, message) {
     container.appendChild(messageDiv);
 }
 
+// Function to clean the HTML of a message.
+// Removes unwanted tags and attributes to sanitize the content.
 function cleanMessageHTML(htmlString) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(htmlString, 'text/html');
 
   function processElement(element) {
+    // Remove <svg> and <button> elements entirely.
     if (element.tagName.toLowerCase() === 'svg' || element.tagName.toLowerCase() === 'button') {
       element.parentNode.removeChild(element);
       return;
     }
 
+    // Strip all attributes from <div> elements.
     if (element.tagName.toLowerCase() === 'div') {
       while (element.attributes.length > 0) {
         element.removeAttribute(element.attributes[0].name);
       }
     }
 
+    // Process child elements recursively.
     const children = [].slice.call(element.childNodes);
     children.forEach(child => {
       if (child.nodeType === 1) {
@@ -48,8 +55,11 @@ function cleanMessageHTML(htmlString) {
   return doc.body.innerHTML;
 }
 
+// Holds the last batch of fetched messages to detect changes.
 let lastFetchedMessages = [];
 
+// Function to request and fetch messages from the background script.
+// If new messages are different from the last fetched ones, updates the display.
 function fetchMessages() {
     chrome.runtime.sendMessage({action: "fetchMessages"}, function(response) {
         if (response && response.messages) {
@@ -70,14 +80,15 @@ function fetchMessages() {
                     behavior: 'smooth'
                 });
 
+                // If new message is recieved, double fetch messages after 2 seconds.
                 setTimeout(fetchMessages, 2000);
             }
         }
     });
 }
 
-// document.getElementById('fetchMessages').addEventListener('click', fetchMessages);
-
+// Initially fetch messages when the DOM content is fully loaded.
 document.addEventListener('DOMContentLoaded', fetchMessages);
 
+// Set up a repeating fetch every 10 seconds to keep the message display updated.
 setInterval(fetchMessages, 10000);
