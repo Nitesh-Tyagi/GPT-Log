@@ -2,9 +2,21 @@
     "manifest_version": 3,
     "name": "GPT Log",
     "version": "1.0",
-    "description": "",
+    "description": "Chrome extension to asynchronously read active chat with OpenAI ChatGPT, processes it, and save it as a local Chrome variable to render live with Popup.",
+    "icons": {
+        "16": "images/icon-16.png",
+        "32": "images/icon-32.png",
+        "48": "images/icon-48.png",
+        "128": "images/icon-128.png"
+    },
     "action": {
-        "default_popup": "popup/popup.html"
+        "default_popup": "popup/popup.html",
+        "default_icon": {
+            "16": "images/icon-16.png",
+            "32": "images/icon-32.png",
+            "48": "images/icon-48.png",
+            "128": "images/icon-128.png"
+        }
     },
     "content_scripts": [
         {
