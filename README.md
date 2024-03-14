@@ -35,7 +35,7 @@ The content script gathers chat logs through scroll actions, clicks, and initial
 }
 ```
 
-### Functions:
+## Service Worker:
 
 - **Listen for Content Script:** The service worker listens for messages from the content script, receiving and storing the chat logs as a local variable. It's important to manage these messages efficiently to ensure the extension remains responsive.
 
@@ -45,7 +45,7 @@ The content script gathers chat logs through scroll actions, clicks, and initial
 
 The popup script is tasked with displaying the processed chat logs. It employs a self-update mechanism to refresh the displayed content, ensuring users have access to the most recent messages.
 
-### Features:
+### Function:
 
 - **Self-Update:** The popup automatically updates the displayed chat logs every 10 seconds, ensuring that the information is always current.
 
