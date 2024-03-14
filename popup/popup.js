@@ -48,42 +48,36 @@ function cleanMessageHTML(htmlString) {
   return doc.body.innerHTML;
 }
 
+let lastFetchedMessages = [];
 
-document.getElementById('fetchMessages').addEventListener('click', function() {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {action: "fetchMessages"}, function(response) {
+function fetchMessages() {
+    chrome.runtime.sendMessage({action: "fetchMessages"}, function(response) {
+        if (response && response.messages) {
             console.log(response.messages);
 
+            const isNewMessageDifferent = JSON.stringify(lastFetchedMessages) !== JSON.stringify(response.messages);
+            
+            lastFetchedMessages = response.messages;
 
-            const container = document.getElementById('container');
-            container.innerHTML = '';
-
-            response.messages.forEach(msg => displayMessage(msg.sender, msg.message));
-
-            container.scrollTop = container.scrollHeight;
-        });
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        chrome.tabs.sendMessage(tabs[0].id, {action: "fetchMessages"}, function(response) {
-            if (response && response.messages) {
-                console.log(response.messages);
-
+            if (isNewMessageDifferent) {
                 const container = document.getElementById('container');
                 container.innerHTML = '';
 
                 response.messages.forEach(msg => displayMessage(msg.sender, msg.message));
 
-                // container.scrollTop = container.scrollHeight;
                 container.scrollTo({
                     top: container.scrollHeight,
                     behavior: 'smooth'
-                  });
+                });
+
+                setTimeout(fetchMessages, 2000);
             }
-        });
+        }
     });
-});
+}
 
+// document.getElementById('fetchMessages').addEventListener('click', fetchMessages);
 
+document.addEventListener('DOMContentLoaded', fetchMessages);
+
+setInterval(fetchMessages, 10000);

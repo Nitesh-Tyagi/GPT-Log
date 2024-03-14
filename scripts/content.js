@@ -37,14 +37,17 @@ function fetchMessages() {
     if (div && div.children.length > 1) {
         for (let i = 1; i < div.children.length; i++) {
             try {
-                var sender = "", message = "";
-                sender = div.children[i].children[0].children[0].children[1].children[0].innerText;
-                message = div.children[i].children[0].children[0].children[1].children[1].innerHTML;
+                let sender = "", message = "";
+                // RUSHED, FIX LATER
+                const senderElement = div.children[i].children[0]?.children[0]?.children[1]?.children[0];
+                const messageElement = div.children[i].children[0]?.children[0]?.children[1]?.children[1];
+                if (senderElement && messageElement) {
+                    sender = senderElement.innerText;
+                    message = messageElement.innerHTML;
 
-                var parsedMessage = "";
-                parsedMessage = stripHtmlAttributes(message);
-
-                messages.push({ sender: sender, message: parsedMessage });
+                    const parsedMessage = stripHtmlAttributes(message);
+                    messages.push({ sender: sender, message: parsedMessage });
+                }
             } catch (error) {
                 console.error('Error accessing nested elements for child ' + i + ':', error.message);
             }
@@ -57,12 +60,114 @@ function fetchMessages() {
     return messages;
 }
 
+document.addEventListener('click', function() {
+    const messages = fetchMessages();
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-    if (request.action === "fetchMessages") {
-      const messages = fetchMessages();
-      sendResponse({messages: messages});
-    }
-    
-    return true;
+    chrome.runtime.sendMessage({action: "saveMessages", messages: messages}, function(response) {
+        const url = window.location.href;
+        const timestamp = new Date().toISOString();
+
+        console.log("SAVED MESSAGES  ::  ",url,"  ::  ",timestamp);
+        // console.log(response);
+    });
 });
+
+// const handleMutations = function(mutationsList, observer) {
+//     var count = 0;
+//     for(let mutation of mutationsList) {
+//         if(mutation.type === 'childList' || mutation.type === 'attributes') {
+//             count++;
+//             break;
+//         }
+//     }
+//     if(count > 0) {
+//         console.log("OBSERVED : ",count);
+//             const messages = fetchMessages();
+
+//             chrome.runtime.sendMessage({action: "saveMessages", messages: messages}, function(response) {
+//                 const url = window.location.href;
+//                 const timestamp = new Date().toISOString();
+
+//                 // console.log("SAVED MESSAGES  ::  ",url,"  ::  ",timestamp);
+//                 // console.log(response);
+//             });
+//     }
+// };
+
+// const config = { attributes: true, childList: true, subtree: true };
+// const observer = new MutationObserver(handleMutations);
+
+// const targetNode = document.querySelector('.react-scroll-to-bottom--css-fffdd-1n7m0yu');
+// const targetNode = document.querySelector(".react-scroll-to-bottom--css-osbrt-1n7m0yu");
+const targetNode = document;
+
+function throttle(func, limit) {
+    let lastFunc;
+    let lastRan;
+    return function() {
+        const context = this;
+        const args = arguments;
+        if (!lastRan) {
+            func.apply(context, args);
+            lastRan = Date.now();
+        } else {
+            clearTimeout(lastFunc);
+            lastFunc = setTimeout(function() {
+                if ((Date.now() - lastRan) >= limit) {
+                    func.apply(context, args);
+                    lastRan = Date.now();
+                }
+            }, limit - (Date.now() - lastRan));
+        }
+    }
+}
+
+const throttledScrollListener = throttle(function(event) {
+    console.log('SCROLL : ', event.target);
+
+    const messages = fetchMessages();
+
+    chrome.runtime.sendMessage({action: "saveMessages", messages: messages}, function(response) {
+        const url = window.location.href;
+        const timestamp = new Date().toISOString();
+    });
+}, 400); // 100ms
+
+targetNode.addEventListener('scroll', throttledScrollListener, true);
+
+
+
+
+
+
+
+
+
+// targetNode.addEventListener('scroll', (event) => {
+//     console.log('SCROLL : ', event.target);
+
+//     const messages = fetchMessages();
+
+//     chrome.runtime.sendMessage({action: "saveMessages", messages: messages}, function(response) {
+//         const url = window.location.href;
+//         const timestamp = new Date().toISOString();
+//     });
+// }, true);
+
+// if (targetNode) {
+//     observer.observe(targetNode, config);
+// } else {
+//     console.error('The target node for mutation observation does not exist.');
+// }
+
+
+// observer.disconnect();
+
+
+setTimeout(function(){
+    const messages = fetchMessages();
+    chrome.runtime.sendMessage({action: "saveMessages", messages: messages}, function(response) {
+        const url = window.location.href;
+        const timestamp = new Date().toISOString();
+    });
+},500);

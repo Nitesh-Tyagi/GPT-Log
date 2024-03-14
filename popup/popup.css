@@ -16,7 +16,7 @@ body {
     flex-direction: column;
     margin: 10px;
     padding: 10px;
-    height: 380px;
+    height: 390px;
     width: 580px;
     overflow-y: auto;
     border: 1px solid #ddd;
@@ -39,12 +39,11 @@ body {
 
 .message-html {
     word-break: break-word;
-    overflow-wrap: break-word; /* Ensures long words or URLs wrap and do not overflow */
-    max-width: 100%; /* Ensures content does not exceed the container width */
+    overflow-wrap: break-word;
+    max-width: 100%;
     padding-left: 15px;
 }
 
-/* Specific styles for elements within .message-html */
 .message-html p,
 .message-html h1, .message-html h2, .message-html h3,
 .message-html h4, .message-html h5, .message-html h6,
@@ -52,7 +51,7 @@ body {
 .message-html pre, .message-html code,
 .message-html table, .message-html span {
     margin-bottom: 8px;
-    max-width: 100%; /* Ensures these elements do not exceed container width */
+    max-width: 100%;
 }
 
 .message-html ul, .message-html ol {
@@ -63,7 +62,7 @@ body {
     background-color: #e4e4e4;
     padding: 10px;
     border-radius: 5px;
-    overflow-x: auto; /* Allows horizontal scrolling for code blocks if needed */
+    overflow-x: auto;
 }
 
 .message-html code {
@@ -74,7 +73,7 @@ body {
 
 .message-html table {
     border-collapse: collapse;
-    width: auto; /* Allows table to be as wide as its content up to container width */
+    width: auto;
 }
 
 .message-html table, .message-html th, .message-html td {
@@ -86,7 +85,6 @@ body {
     background-color: #f2f2f2;
 }
 
-/* Style adjustments for links */
 .message-html a {
     color: #007bff;
     text-decoration: none;
@@ -96,7 +94,6 @@ body {
     text-decoration: underline;
 }
 
-/* Scrollbar styles */
 ::-webkit-scrollbar {
     width: 8px;
 }
