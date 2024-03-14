@@ -26,11 +26,10 @@ The content script gathers chat logs through scroll actions, clicks, and initial
 
 ```json
 {
-  "URL": "http://example.com/chat",
   "Messages": [
     {
-      "Sender": "John Doe",
-      "Message": "<div><h2>Hello, World!</h2></div>"
+      "sender": "John Doe",
+      "message": "<div><h2>Hello, World!</h2></div>"
     }
   ]
 }
