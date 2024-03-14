@@ -1,9 +1,8 @@
 # GPT-Log
-# Chrome Extension for Chat Log Processing
 
 ## Description
 
-This Chrome extension asynchronously reads the active chat log through a content script, processes it, and saves it as a local Chrome variable. It also enables the popup to call the service worker, request the saved messages, process the HTML received, and display it. Designed to enhance user productivity, this tool provides easy access to processed and formatted chat logs.
+This Chrome extension asynchronously reads the active chat log through a content script, processes it, and saves it as a local Chrome variable. It also enables the popup to call the service worker, request the saved messages, process the HTML received, and display it.
 
 ## How to Install
 
@@ -11,12 +10,12 @@ This Chrome extension asynchronously reads the active chat log through a content
 2. Unzip the file to your desired location.
 3. Open Chrome and navigate to `chrome://extensions/`.
 4. Enable Developer Mode by toggling the switch at the top right.
-5. Click on "Load unpacked" and select the unzipped extension folder.
+5. Click on "Load unpacked" and select the unzipped extension folder. Make sure the folder contains `Manifest.json`.
 6. The extension is now installed and should be visible in your extensions list.
 
 ## Content Script
 
-The content script gathers chat logs through scroll actions, clicks, and initial loading (500ms delay). It extracts HTML content, strips it of any HTML tags, and sends the processed data to the service worker.
+The content script gathers chat logs through scroll actions, clicks, and initial loading (500ms delay). It extracts HTML content, processes it - stripping attributes and removes some tags (SVG & buttons), and sends the processed data to the service worker.
 
 ### Listeners:
 
@@ -31,7 +30,7 @@ The content script gathers chat logs through scroll actions, clicks, and initial
   "Messages": [
     {
       "Sender": "John Doe",
-      "Message": "Hello, World!"
+      "Message": "<div><h2>Hello, World!</h2></div>"
     }
   ]
 }
@@ -75,7 +74,9 @@ This section outlines potential areas of improvement and expansion for the exten
 
 - **Content Script Double Listener:** Implementing a more robust listening strategy in the content script to enhance data capture capabilities.
 
-- **Error Log Improvements:** We plan to improve error logging and debugging to make the extension more reliable and easier to maintain.
+- **Error Log Improvements:** I plan to improve error logging and debugging to make the extension more reliable and easier to maintain.
 
-- **DALL-E Integration:** Exploring the possibility of integrating with DALL-E or similar AI to enhance the visual content processing capabilities of the extension.
+- **DALL-E Integration:** Exploring the possibility of integrating with DALL-E chats to enhance the usability of the extension.
+
+- **Message Size:** Future versions will have a big focus on managing the message sizes and timings to ensure quick and efficient functioning.
 
